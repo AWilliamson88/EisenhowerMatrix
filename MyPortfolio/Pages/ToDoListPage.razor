@@ -1,0 +1,77 @@
+﻿@page "/fetchdata"
+
+<PageTitle>To Do Lists</PageTitle>
+
+@using DataModels.Models
+@using UIServices
+@inject IUIListService ListService
+
+<h3>Welcome To The ToDo List Page</h3>
+
+@foreach (var list in Data)
+{
+	@if (Data.Count > 0)
+	{
+		<div class="progress my-2">
+			<div class="progress-bar" role="progressbar"
+		 style="width: @((() => PercentDone(list)))%"
+		 aria-valuemin="0" aria-valuemax="100">
+				@((() => PercentDone(list)))%
+			</div>
+		</div>
+	}
+
+	<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="(() => AddTask(list.ToDoItems))">
+		<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
+		<button class="btn btn-outline-primary" type="submit">Add Task</button>
+	</EditForm>
+
+	<ul class="list-group">
+		@foreach (var item in list.ToDoItems)
+		{
+			@if (item.IsComplete)
+			{
+				<li class="list-group-item list-group-item-success my-1"
+		@onclick="(() => item.IsComplete = !item.IsComplete)">
+					<del>@item.Name</del>
+				</li>
+			}
+			else
+			{
+				<li class="list-group-item list-group-item-success my-1"
+		@onclick="(() => item.IsComplete = !item.IsComplete)">
+					@item.Name
+				</li>
+			}
+		}
+	</ul>
+}
+
+@code {
+
+	private List<ToDoList> Data = new List<ToDoList>();
+	private ToDoList newList = new ToDoList();
+	private ToDoItem newItem = new ToDoItem();
+
+	protected override async Task OnInitializedAsync()
+	{
+		await GetTasks();
+	}
+
+	private async Task GetTasks()
+	{
+		Data = await ListService.GetToDoLists();
+	}
+
+    private int PercentDone(ToDoList toDolist)
+    {
+        return (toDolist.ToDoItems.Count(x => x.IsComplete) * 100) / toDolist.ToDoItems.Count;
+    }
+
+    private void AddTask(ICollection<ToDoItem> toDolist)
+    {
+        toDolist.Add(newItem);
+        newItem = new ToDoItem();
+	}
+
+}
