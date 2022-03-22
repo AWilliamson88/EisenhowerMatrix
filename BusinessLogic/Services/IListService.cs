@@ -8,5 +8,9 @@ namespace BusinessLogic.Services
         void AddLists(IEnumerable<ToDoList> lists);
         Task<List<ToDoList>> GetTasks();
         void SaveChanges();
+        void Delete(int listId);
+        void Delete(int listId, int itemId);
+        int AddList(ToDoList list);
+        int ListAddItem(ToDoList list);
     }
 }

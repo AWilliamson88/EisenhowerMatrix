@@ -3,53 +3,66 @@
 <PageTitle>To Do Lists</PageTitle>
 
 @using DataModels.Models
+@using UI.ToDoComponents
 @using UIServices
 @inject IUIListService ListService
 
-<h3>Welcome To The ToDo List Page</h3>
+<h1>Welcome To The ToDo List Page</h1>
 
-@foreach (var list in Data)
-{
-	@if (Data.Count > 0)
+<pannel class="row">
+	@foreach (var list in ToDos)
 	{
-		<div class="progress my-2">
-			<div class="progress-bar" role="progressbar"
-		 style="width: @((() => PercentDone(list)))%"
-		 aria-valuemin="0" aria-valuemax="100">
-				@((() => PercentDone(list)))%
-			</div>
-		</div>
+		<card class="col-md-4">
+			<h3 class="text-center">@list.Name.ToUpper()</h3>
+
+			@if (ToDos.Count > 0 && ToDos != null)
+			{
+				currentList = list;
+				<ToDoProgress toDoList="@list"></ToDoProgress>
+@*
+				<div class="progress my-2">
+					<div class="progress-bar" role="progressbar"
+				 style="width: @(percentDone)%"
+				 aria-valuemin="0" aria-valuemax="100">
+						@(percentDone)%
+					</div>
+				</div>*@
+			}
+
+			<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="() => AddTask(list)">
+				<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
+				<button class="btn btn-outline-primary float-end" type="submit">Add Task</button>
+			</EditForm>
+
+			<ul class="list-group">
+				@foreach (var item in list.ToDoItems)
+				{
+					<li class="list-group-item list-group-item-success my-1"
+				@onclick="(() => item.IsComplete = !item.IsComplete)">
+					<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
+						@if (item.IsComplete)
+						{
+							<del>@item.Name</del>
+						}
+						else
+						{
+							@item.Name
+						}
+					</span>
+						<span class="todoitem todoitem-del">
+							<button class="btn btn-outline-Warning float-end" type="button" @onclick="(() => Delete(list, item))">Del</button>
+						</span>
+					</li>
+				}
+			</ul>
+		</card>
 	}
-
-	<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="(() => AddTask(list.ToDoItems))">
-		<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
-		<button class="btn btn-outline-primary" type="submit">Add Task</button>
-	</EditForm>
-
-	<ul class="list-group">
-		@foreach (var item in list.ToDoItems)
-		{
-			@if (item.IsComplete)
-			{
-				<li class="list-group-item list-group-item-success my-1"
-		@onclick="(() => item.IsComplete = !item.IsComplete)">
-					<del>@item.Name</del>
-				</li>
-			}
-			else
-			{
-				<li class="list-group-item list-group-item-success my-1"
-		@onclick="(() => item.IsComplete = !item.IsComplete)">
-					@item.Name
-				</li>
-			}
-		}
-	</ul>
-}
+</pannel>
 
 @code {
 
-	private List<ToDoList> Data = new List<ToDoList>();
+	private List<ToDoList> ToDos = new List<ToDoList>();
+	private ToDoList currentList;
 	private ToDoList newList = new ToDoList();
 	private ToDoItem newItem = new ToDoItem();
 
@@ -60,18 +73,35 @@
 
 	private async Task GetTasks()
 	{
-		Data = await ListService.GetToDoLists();
+		ToDos = await ListService.GetToDoLists();
 	}
 
-    private int PercentDone(ToDoList toDolist)
-    {
-        return (toDolist.ToDoItems.Count(x => x.IsComplete) * 100) / toDolist.ToDoItems.Count;
-    }
 
-    private void AddTask(ICollection<ToDoItem> toDolist)
-    {
-        toDolist.Add(newItem);
-        newItem = new ToDoItem();
+
+	//private int PercentDone(ToDoList toDolist)
+	//{
+	//	string percentDone = ((toDolist.ToDoItems.Count(x => x.IsComplete) * 100) / toDolist.ToDoItems.Count).ToString();
+	//	return int.Parse(percentDone);
+	//}
+
+	private void AddTask(ToDoList toDoList)
+	{
+		toDoList.ToDoItems.Add(newItem);
+		int result = ListService.AddItem(toDoList).Result;
+		newItem = new ToDoItem();
+		newItem.Name = result.ToString();
+	}
+
+	private void Delete(ToDoList list, ToDoItem item)
+	{
+		ListService.Delete(list.ToDoListId, item.ToDoItemId);
+		list.ToDoItems.Remove(item);
+	}
+
+	private void Delete(ToDoList list)
+	{
+		ListService.Delete(list.ToDoListId);
+		ToDos.Remove(list);
 	}
 
 }

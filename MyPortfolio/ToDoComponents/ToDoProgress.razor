@@ -1,0 +1,23 @@
+﻿@using DataModels.Models
+
+<div class="progress my-2">
+	<div class="progress-bar" role="progressbar"
+			style="width: @(percentDone)%"
+			aria-valuemin="0" aria-valuemax="100">
+		@(percentDone)%
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public ToDoList toDoList { get; set; }
+
+	private int percentDone
+	{
+		get
+		{
+			return (toDoList.ToDoItems.Count(x => x.IsComplete) * 100) / toDoList.ToDoItems.Count;
+		}
+	}
+
+}

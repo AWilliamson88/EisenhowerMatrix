@@ -16,12 +16,12 @@ namespace BusinessLogic.Services
             context = _context;
         }
 
-    //    using (var context = _contextFactory.CreateDbContext())
-    //    {
-    //        // ...
-    //    }
+        //    using (var context = _contextFactory.CreateDbContext())
+        //    {
+        //        // ...
+        //    }
 
-public void InitialiseDb()
+        public void InitialiseDb()
         {
             if (context.ToDoLists.Any())
             {
@@ -78,6 +78,54 @@ public void InitialiseDb()
         public void SaveChanges()
         {
             context.SaveChanges();
+        }
+
+        public void Delete(int listId)
+		{
+            var target = context.ToDoLists
+                .Where(i => i.ToDoListId == listId)
+                .FirstOrDefault();
+
+            context.Remove<ToDoList>(target);
+            context.SaveChanges();
+        }
+
+        public void Delete(int listId, int itemId)
+        {
+
+            //var list = context.ToDoLists
+            //    .Where(l => l.ToDoListId == listId)
+            //    .FirstOrDefault();
+
+            var target = context.ToDoItems
+                .Where(i => i.ToDoItemId == itemId)
+                .FirstOrDefault();
+
+            context.Remove<ToDoItem>(target);
+            context.SaveChanges();
+        }
+
+        public int ListAddItem(ToDoList updatedList)
+		{
+            var originalList = context.ToDoLists
+                .Where(l => l.ToDoListId == updatedList.ToDoListId)
+                .First();
+            
+            foreach(var item in updatedList.ToDoItems)
+			{
+                if (!originalList.ToDoItems.Contains(item))
+                {
+                    originalList.ToDoItems.Add(item);
+				} 
+			}
+
+            return context.SaveChanges();
+		}
+
+        public int AddList(ToDoList list)
+        {
+            //context.ToDoLists.Add(item);
+            return context.SaveChanges();
         }
     }
 }

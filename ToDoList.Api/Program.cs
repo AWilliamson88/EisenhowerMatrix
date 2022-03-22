@@ -1,7 +1,7 @@
 using BusinessLogic.Services;
 using DataModels.Models;
 using Microsoft.EntityFrameworkCore;
-using ToDoList.Api;
+using Api;
 
 var builder = WebApplication.CreateBuilder(args);
 

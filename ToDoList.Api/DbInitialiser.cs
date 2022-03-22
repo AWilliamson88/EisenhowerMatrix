@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.Services;
 using DataModels.Models;
 
-namespace ToDoList.Api
+namespace Api
 {
     public static class DbInitialiser
     {
