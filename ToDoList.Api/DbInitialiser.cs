@@ -5,7 +5,7 @@ namespace Api
 {
     public static class DbInitialiser
     {
-        public static void Initialise(IListService listService)
+        public static void Initialise(IToDoDataAccessService listService)
         {
             listService.InitialiseDb();
         }

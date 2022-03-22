@@ -18,7 +18,7 @@ builder.Services.AddDbContext<PortfolioContext>(options =>
                     typeof(PortfolioContext).Assembly.FullName))
                 );
 
-builder.Services.AddScoped<IListService, ListService>();
+builder.Services.AddScoped<IToDoDataAccessService, ToDoDataAccessService>();
 
 var app = builder.Build();
 
@@ -33,7 +33,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    var InitialisationService = services.GetRequiredService<IListService>();
+    var InitialisationService = services.GetRequiredService<IToDoDataAccessService>();
 
     DbInitialiser.Initialise(InitialisationService);
 }

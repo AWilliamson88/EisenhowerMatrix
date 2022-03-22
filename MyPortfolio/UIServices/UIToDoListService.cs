@@ -5,12 +5,12 @@ using System.Web.Http;
 
 namespace UI.UIServices
 {
-    public class UIListService : IUIListService
+    public class UIToDoListService : IUIToDoListService
     {
         //private readonly HttpClient _httpClient;
         private readonly HttpClient httpClient;
 
-        public UIListService(HttpClient _httpClient)
+        public UIToDoListService(HttpClient _httpClient)
         {
             this.httpClient = _httpClient;
         }
@@ -41,9 +41,9 @@ namespace UI.UIServices
                 "&itemId=" + itemId);
         }
 
-        public async Task<int> AddItem(ToDoList toDoList)
+        public async Task<int> AddItems(int listId, ICollection<ToDoItem> items)
         {
-            var result = await httpClient.PutAsJsonAsync("api/ToDoList/Put", toDoList);
+            var result = await httpClient.PutAsJsonAsync($"api/ToDoList/Put?listId={listId}", items);
 
             return (int)result.StatusCode;
         }

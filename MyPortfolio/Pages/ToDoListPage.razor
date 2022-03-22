@@ -5,7 +5,7 @@
 @using DataModels.Models
 @using UI.ToDoComponents
 @using UIServices
-@inject IUIListService ListService
+@inject IUIToDoListService ToDoListCRUDService
 
 <h1>Welcome To The ToDo List Page</h1>
 
@@ -19,17 +19,9 @@
 			{
 				currentList = list;
 				<ToDoProgress toDoList="@list"></ToDoProgress>
-@*
-				<div class="progress my-2">
-					<div class="progress-bar" role="progressbar"
-				 style="width: @(percentDone)%"
-				 aria-valuemin="0" aria-valuemax="100">
-						@(percentDone)%
-					</div>
-				</div>*@
 			}
 
-			<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="() => AddTask(list)">
+			<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="() => AddItems(list)">
 				<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
 				<button class="btn btn-outline-primary float-end" type="submit">Add Task</button>
 			</EditForm>
@@ -68,12 +60,12 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await GetTasks();
+		await GetToDoLists();
 	}
 
-	private async Task GetTasks()
+	private async Task GetToDoLists()
 	{
-		ToDos = await ListService.GetToDoLists();
+		ToDos = await ToDoListCRUDService.GetToDoLists();
 	}
 
 
@@ -84,23 +76,23 @@
 	//	return int.Parse(percentDone);
 	//}
 
-	private void AddTask(ToDoList toDoList)
+	private void AddItems(ToDoList toDoList)
 	{
 		toDoList.ToDoItems.Add(newItem);
-		int result = ListService.AddItem(toDoList).Result;
+		int result = ToDoListCRUDService.AddItems(toDoList.ToDoListId, toDoList.ToDoItems).Result;
 		newItem = new ToDoItem();
 		newItem.Name = result.ToString();
 	}
 
 	private void Delete(ToDoList list, ToDoItem item)
 	{
-		ListService.Delete(list.ToDoListId, item.ToDoItemId);
+		ToDoListCRUDService.Delete(list.ToDoListId, item.ToDoItemId);
 		list.ToDoItems.Remove(item);
 	}
 
 	private void Delete(ToDoList list)
 	{
-		ListService.Delete(list.ToDoListId);
+		ToDoListCRUDService.Delete(list.ToDoListId);
 		ToDos.Remove(list);
 	}
 

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
-    public class ListService : IListService
+    public class ToDoDataAccessService : IToDoDataAccessService
     {
         private readonly PortfolioContext context;
-        public ListService(PortfolioContext _context)
+        public ToDoDataAccessService(PortfolioContext _context)
         {
             context = _context;
         }
@@ -84,7 +84,7 @@ namespace BusinessLogic.Services
 		{
             var target = context.ToDoLists
                 .Where(i => i.ToDoListId == listId)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             context.Remove<ToDoList>(target);
             context.SaveChanges();
@@ -99,26 +99,21 @@ namespace BusinessLogic.Services
 
             var target = context.ToDoItems
                 .Where(i => i.ToDoItemId == itemId)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             context.Remove<ToDoItem>(target);
             context.SaveChanges();
         }
 
-        public int ListAddItem(ToDoList updatedList)
+        public int ListAddItems(int listId, List<ToDoItem> items)
 		{
-            var originalList = context.ToDoLists
-                .Where(l => l.ToDoListId == updatedList.ToDoListId)
-                .First();
-            
-            foreach(var item in updatedList.ToDoItems)
-			{
-                if (!originalList.ToDoItems.Contains(item))
-                {
-                    originalList.ToDoItems.Add(item);
-				} 
-			}
+            var list = context.ToDoLists
+                .Where(l => l.ToDoListId == listId)
+                .Single();
 
+            list.ToDoItems = items;
+
+            context.Add(list);
             return context.SaveChanges();
 		}
 

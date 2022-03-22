@@ -9,18 +9,18 @@ namespace Api.Controllers
     [ApiController]
     public class ToDoListController : ControllerBase
     {
-        private readonly IListService listService;
+        private readonly IToDoDataAccessService toDoDb;
 
-        public ToDoListController(IListService _listService)
+        public ToDoListController(IToDoDataAccessService _listService)
         {
-            listService = _listService;
+            toDoDb = _listService;
         }
 
         [HttpGet]
         [Route("GetLists")]
         public IActionResult GetLists()
         {
-            List<DataModels.Models.ToDoList> listModels = listService.GetTasks().Result;
+            List<ToDoList> listModels = toDoDb.GetTasks().Result;
             return Ok(listModels);
         }
 
@@ -42,18 +42,20 @@ namespace Api.Controllers
             if (listId <= 0 || itemId <= 0)
                 return BadRequest("List or item id not valid");
 
-            listService.Delete(listId, itemId);
+            toDoDb.Delete(listId, itemId);
             return Ok();
         }
 
         [HttpPost]
         [Route("Put")]
-        public IActionResult PutList(ToDoList list)
+        public IActionResult PutAddItems(int listId, List<ToDoItem> items)
 		{   // update the list, then send the list through....
 			if (!ModelState.IsValid)
 				return BadRequest("Not a valid model");
+            if (listId <= 0)
+                return BadRequest("Not a valid list number");
 
-			int response = listService.ListAddItem(list);
+            int response = toDoDb.ListAddItems(listId, items);
 
             return response == 0 ? Ok() : NotFound();
 		}
