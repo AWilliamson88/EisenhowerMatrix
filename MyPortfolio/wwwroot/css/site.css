@@ -1,5 +1,9 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.todo-check {
+    padding-right:inherit;
+}
+
 input.form-control {
     width: auto;
 }

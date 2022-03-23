@@ -41,9 +41,14 @@ namespace UI.UIServices
                 "&itemId=" + itemId);
         }
 
+        public async void UpdateItem(ToDoItem item)
+        {
+            await httpClient.PutAsJsonAsync("api/ToDoList/PutItem", item);
+        }
+
         public async Task<int> AddItems(int listId, ICollection<ToDoItem> items)
         {
-            var result = await httpClient.PutAsJsonAsync($"api/ToDoList/Put?listId={listId}", items);
+            var result = await httpClient.PutAsJsonAsync($"api/ToDoList/PutItems?listId={listId}", items);
 
             return (int)result.StatusCode;
         }

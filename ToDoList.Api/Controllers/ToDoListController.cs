@@ -9,18 +9,18 @@ namespace Api.Controllers
     [ApiController]
     public class ToDoListController : ControllerBase
     {
-        private readonly IToDoDataAccessService toDoDb;
+        private readonly IToDoDataService toDoDbService;
 
-        public ToDoListController(IToDoDataAccessService _listService)
+        public ToDoListController(IToDoDataService _listService)
         {
-            toDoDb = _listService;
+            toDoDbService = _listService;
         }
 
         [HttpGet]
         [Route("GetLists")]
         public IActionResult GetLists()
         {
-            List<ToDoList> listModels = toDoDb.GetTasks().Result;
+            List<ToDoList> listModels = toDoDbService.GetTasks().Result;
             return Ok(listModels);
         }
 
@@ -42,12 +42,12 @@ namespace Api.Controllers
             if (listId <= 0 || itemId <= 0)
                 return BadRequest("List or item id not valid");
 
-            toDoDb.Delete(listId, itemId);
+            toDoDbService.Delete(listId, itemId);
             return Ok();
         }
 
-        [HttpPost]
-        [Route("Put")]
+        [HttpPut]
+        [Route("PutItems")]
         public IActionResult PutAddItems(int listId, List<ToDoItem> items)
 		{   // update the list, then send the list through....
 			if (!ModelState.IsValid)
@@ -55,9 +55,20 @@ namespace Api.Controllers
             if (listId <= 0)
                 return BadRequest("Not a valid list number");
 
-            int response = toDoDb.ListAddItems(listId, items);
-
-            return response == 0 ? Ok() : NotFound();
+            int response = toDoDbService.ListAddItems(listId, items);
+            return response > 0 ? Ok() : NotFound();
 		}
+
+        [HttpPut]
+        [Route("PutItem")]
+        public IActionResult UpdateItem(ToDoItem item)
+        {
+            if (!ModelState.IsValid || item == null)
+                return BadRequest("Not a valid todo item");
+
+            int response = toDoDbService.UpdateItem(item);
+            return response > 0 ? Ok() : NotFound();
+        }
+
 	}
 }

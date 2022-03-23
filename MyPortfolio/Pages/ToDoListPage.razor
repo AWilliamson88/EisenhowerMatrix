@@ -5,7 +5,7 @@
 @using DataModels.Models
 @using UI.ToDoComponents
 @using UIServices
-@inject IUIToDoListService ToDoListCRUDService
+@inject IUIToDoListService ToDoCRUDService
 
 <h1>Welcome To The ToDo List Page</h1>
 
@@ -30,19 +30,24 @@
 				@foreach (var item in list.ToDoItems)
 				{
 					<li class="list-group-item list-group-item-success my-1"
-				@onclick="(() => item.IsComplete = !item.IsComplete)">
-					<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
-						@if (item.IsComplete)
-						{
-							<del>@item.Name</del>
-						}
-						else
-						{
-							@item.Name
-						}
-					</span>
+				@onclick="(() => UpdateItem(item))">
+				<EditForm class="todo-check form-check-inline" Model="@item">
+						<InputCheckbox class="form-check position-absolute top-50 translate-middle-y pe-2" 
+						@bind-Value="item.IsComplete" />
+				</EditForm>
+						<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
+							@if (item.IsComplete)
+							{
+								<del>@item.Name</del>
+							}
+							else
+							{
+								@item.Name
+							}
+						</span>
 						<span class="todoitem todoitem-del">
-							<button class="btn btn-outline-Warning float-end" type="button" @onclick="(() => Delete(list, item))">Del</button>
+							<button class="btn btn-outline-Warning float-end" type="button" 
+							@onclick="(() => Delete(list, item))">Del</button>
 						</span>
 					</li>
 				}
@@ -54,7 +59,7 @@
 @code {
 
 	private List<ToDoList> ToDos = new List<ToDoList>();
-	private ToDoList currentList;
+	private ToDoList currentList = new ToDoList();
 	private ToDoList newList = new ToDoList();
 	private ToDoItem newItem = new ToDoItem();
 
@@ -65,7 +70,7 @@
 
 	private async Task GetToDoLists()
 	{
-		ToDos = await ToDoListCRUDService.GetToDoLists();
+		ToDos = await ToDoCRUDService.GetToDoLists();
 	}
 
 
@@ -76,23 +81,28 @@
 	//	return int.Parse(percentDone);
 	//}
 
-	private void AddItems(ToDoList toDoList)
+	private void AddItems(ToDoList list)
 	{
-		toDoList.ToDoItems.Add(newItem);
-		int result = ToDoListCRUDService.AddItems(toDoList.ToDoListId, toDoList.ToDoItems).Result;
+		list.ToDoItems.Add(newItem);
+		int result = ToDoCRUDService.AddItems(list.ToDoListId, list.ToDoItems).Result;
 		newItem = new ToDoItem();
-		newItem.Name = result.ToString();
+	}
+
+	public void UpdateItem(ToDoItem item)
+	{
+		item.IsComplete = !item.IsComplete;
+		ToDoCRUDService.UpdateItem(item);
 	}
 
 	private void Delete(ToDoList list, ToDoItem item)
 	{
-		ToDoListCRUDService.Delete(list.ToDoListId, item.ToDoItemId);
+		ToDoCRUDService.Delete(list.ToDoListId, item.ToDoItemId);
 		list.ToDoItems.Remove(item);
 	}
 
 	private void Delete(ToDoList list)
 	{
-		ToDoListCRUDService.Delete(list.ToDoListId);
+		ToDoCRUDService.Delete(list.ToDoListId);
 		ToDos.Remove(list);
 	}
 

@@ -2,15 +2,16 @@
 
 namespace BusinessLogic.Services
 {
-    public interface IToDoDataAccessService
+    public interface IToDoDataService
     {
         void InitialiseDb();
         void AddLists(IEnumerable<ToDoList> lists);
         Task<List<ToDoList>> GetTasks();
         void SaveChanges();
-        void Delete(int listId);
-        void Delete(int listId, int itemId);
         int AddList(ToDoList list);
         int ListAddItems(int listId, List<ToDoItem> items);
+        int UpdateItem(ToDoItem item);
+        void Delete(int listId);
+        void Delete(int listId, int itemId);
     }
 }

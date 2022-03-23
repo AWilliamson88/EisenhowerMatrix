@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
-    public class ToDoDataAccessService : IToDoDataAccessService
+    public class ToDoDataService : IToDoDataService
     {
         private readonly PortfolioContext context;
-        public ToDoDataAccessService(PortfolioContext _context)
+        public ToDoDataService(PortfolioContext _context)
         {
             context = _context;
         }
@@ -80,6 +80,33 @@ namespace BusinessLogic.Services
             context.SaveChanges();
         }
 
+        public int ListAddItems(int listId, List<ToDoItem> items)
+		{
+            var list = context.ToDoLists
+                .Where(l => l.ToDoListId == listId)
+                .Single();
+
+            list.ToDoItems = items;
+
+            context.Update(list);
+            return context.SaveChanges();
+		}
+
+        public int AddList(ToDoList list)
+        {
+            context.ToDoLists.Add(list);
+            return context.SaveChanges();
+        }
+
+        public int UpdateItem(ToDoItem item)
+        {
+            if (item == null)
+                return 0;
+
+            context.Update(item);
+            return context.SaveChanges();
+        }
+
         public void Delete(int listId)
 		{
             var target = context.ToDoLists
@@ -105,22 +132,5 @@ namespace BusinessLogic.Services
             context.SaveChanges();
         }
 
-        public int ListAddItems(int listId, List<ToDoItem> items)
-		{
-            var list = context.ToDoLists
-                .Where(l => l.ToDoListId == listId)
-                .Single();
-
-            list.ToDoItems = items;
-
-            context.Add(list);
-            return context.SaveChanges();
-		}
-
-        public int AddList(ToDoList list)
-        {
-            //context.ToDoLists.Add(item);
-            return context.SaveChanges();
-        }
     }
 }
