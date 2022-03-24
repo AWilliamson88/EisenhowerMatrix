@@ -1,7 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-.todo-check {
-    padding-right:inherit;
+card.todolist {
+
 }
 
 input.form-control {

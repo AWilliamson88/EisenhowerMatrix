@@ -7,7 +7,6 @@ namespace UI.UIServices
 {
     public class UIToDoListService : IUIToDoListService
     {
-        //private readonly HttpClient _httpClient;
         private readonly HttpClient httpClient;
 
         public UIToDoListService(HttpClient _httpClient)
@@ -15,23 +14,9 @@ namespace UI.UIServices
             this.httpClient = _httpClient;
         }
 
-        //public UIListService(HttpClient httpClient)
-        //{
-        //    _httpClient = httpClient;
-        //}
-
         public async Task<List<ToDoList>> GetToDoLists()
         {
-            //return await _httpClient.GetFromJsonAsync<List<ToDoListModel>>("/todolist/getlist");
             return await httpClient.GetFromJsonAsync<List<ToDoList>>("api/ToDoList/GetLists");
-            // "/todolist/getlist"
-        }
-
-        public void Delete(int listId)
-        {
-            //apiClient.PostAsJsonAsync("api/ToDoList", item);
-            //httpClient.DeleteAsync("api/ToDoList/Delete/" + listId.ToString());
-
         }
 
         public void Delete(int listId, int itemId)
@@ -52,11 +37,6 @@ namespace UI.UIServices
 
             return (int)result.StatusCode;
         }
-
-        public void AddList()
-		{
-
-		}
 
     }
 }

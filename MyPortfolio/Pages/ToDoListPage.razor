@@ -1,4 +1,4 @@
-﻿@page "/fetchdata"
+﻿@page "/todomatrix"
 
 <PageTitle>To Do Lists</PageTitle>
 
@@ -12,7 +12,8 @@
 <pannel class="row">
 	@foreach (var list in ToDos)
 	{
-		<card class="col-md-4">
+		
+		<card class="todolist col-md-6">
 			<h3 class="text-center">@list.Name.ToUpper()</h3>
 
 			@if (ToDos.Count > 0 && ToDos != null)
@@ -21,18 +22,19 @@
 				<ToDoProgress toDoList="@list"></ToDoProgress>
 			}
 
-			<EditForm class="form-inline my-2" Model="@newItem" OnValidSubmit="() => AddItems(list)">
+			<EditForm class="form-inline my-2" Model="@newItem">
 				<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
-				<button class="btn btn-outline-primary float-end" type="submit">Add Task</button>
+				<button class="btn btn-outline-primary float-end" type="submit" 
+					@onclick="(() => AddItems(list))">Add Task</button>
 			</EditForm>
 
 			<ul class="list-group">
 				@foreach (var item in list.ToDoItems)
 				{
-					<li class="list-group-item list-group-item-success my-1"
-				@onclick="(() => UpdateItem(item))">
-				<EditForm class="todo-check form-check-inline" Model="@item">
-						<InputCheckbox class="form-check position-absolute top-50 translate-middle-y pe-2" 
+					<li class="list-group-item list-group-item-success my-1">
+						<span class="todo-item" @onclick="(() => UpdateItem(item))" >
+				<EditForm class="form-check-inline pe-2" Model="@item">
+						<InputCheckbox class="form-check position-absolute top-50 translate-middle-y " 
 						@bind-Value="item.IsComplete" />
 				</EditForm>
 						<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
@@ -44,6 +46,7 @@
 							{
 								@item.Name
 							}
+						</span>
 						</span>
 						<span class="todoitem todoitem-del">
 							<button class="btn btn-outline-Warning float-end" type="button" 
@@ -84,7 +87,7 @@
 	private void AddItems(ToDoList list)
 	{
 		list.ToDoItems.Add(newItem);
-		int result = ToDoCRUDService.AddItems(list.ToDoListId, list.ToDoItems).Result;
+		ToDoCRUDService.AddItems(list.ToDoListId, list.ToDoItems);
 		newItem = new ToDoItem();
 	}
 
@@ -98,12 +101,6 @@
 	{
 		ToDoCRUDService.Delete(list.ToDoListId, item.ToDoItemId);
 		list.ToDoItems.Remove(item);
-	}
-
-	private void Delete(ToDoList list)
-	{
-		ToDoCRUDService.Delete(list.ToDoListId);
-		ToDos.Remove(list);
 	}
 
 }

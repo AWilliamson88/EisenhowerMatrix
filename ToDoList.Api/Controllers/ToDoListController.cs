@@ -21,19 +21,12 @@ namespace Api.Controllers
         public IActionResult GetLists()
         {
             List<ToDoList> listModels = toDoDbService.GetTasks().Result;
+
+            if (listModels == null)
+                listModels = new List<ToDoList> { new ToDoList() };
+
             return Ok(listModels);
         }
-
-  //      [HttpDelete]
-  //      [Route("Delete")]
-  //      public IActionResult DeleteList(int listId)
-		//{
-  //          if (listId <= 0)
-  //              return BadRequest("Not a valid list id");
-
-  //          listService.Delete(listId);
-  //          return Ok();
-  //      }
 
         [HttpDelete]
         [Route("Delete")]
