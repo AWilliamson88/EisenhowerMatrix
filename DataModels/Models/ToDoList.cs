@@ -12,7 +12,7 @@ namespace DataModels.Models
         public int ToDoListId { get; set; }
         [Required]
         [StringLength(50)]
-        public string Name { get; set; } = "New List";
+        public string Title { get; set; } = string.Empty;
 
         public ICollection<ToDoItem> ToDoItems { get; set; } = new List<ToDoItem>();
     }

@@ -16,11 +16,6 @@ namespace BusinessLogic.Services
             context = _context;
         }
 
-        //    using (var context = _contextFactory.CreateDbContext())
-        //    {
-        //        // ...
-        //    }
-
         public void InitialiseDb()
         {
             if (context.ToDoLists.Any())
@@ -28,39 +23,24 @@ namespace BusinessLogic.Services
                 return;
             }
 
-            ToDoList list1 = new ToDoList { Name = "Work Items" };
-            ToDoList list2 = new ToDoList { Name = "Shopping List" };
+            ToDoList list1 = new ToDoList { Title = "Urgent + Important" };
+            ToDoList list2 = new ToDoList { Title = "Urgent + Not-Important" };
+            ToDoList list3 = new ToDoList { Title = "Not-Urgent + Important" };
+            ToDoList list4 = new ToDoList { Title = "Not-Urgent + Not-Important" };
 
-            list1.ToDoItems.Add(new ToDoItem { Name = "Daily Planner" });
-            list1.ToDoItems.Add(new ToDoItem { Name = "Get Coffee" });
-            list1.ToDoItems.Add(new ToDoItem { Name = "Check Emails" });
+            list1.ToDoItems.Add(new ToDoItem { Title = "Daily Planner" });
+            list1.ToDoItems.Add(new ToDoItem { Title = "Get Coffee" });
+            list1.ToDoItems.Add(new ToDoItem { Title = "Check Emails" });
 
-            list2.ToDoItems.Add(new ToDoItem { Name = "Milk" });
-            list2.ToDoItems.Add(new ToDoItem { Name = "Bread" });
-            list2.ToDoItems.Add(new ToDoItem { Name = "Dinner" });
+            list2.ToDoItems.Add(new ToDoItem { Title = "Milk" });
+            list2.ToDoItems.Add(new ToDoItem { Title = "Bread" });
+            list2.ToDoItems.Add(new ToDoItem { Title = "Dinner" });
 
             context.Add(list1);
             context.Add(list2);
+            context.Add(list3);
+            context.Add(list4);
             context.SaveChanges();
-
-            //ToDoList  list1 = new ToDoList { Name = "Work Items" };
-            //ToDoList  list2 = new ToDoList { Name = "Shopping List" };
-
-            //context.Add(list1);
-            //context.Add(list2);
-            //context.SaveChanges();
-
-            //var lists = context.ToDoLists.ToList();
-
-            //lists.First().ToDoItems.Add(new ToDoItem { Name = "Daily Planner" });
-            //lists.First().ToDoItems.Add(new ToDoItem { Name = "Get Coffee" });
-            //lists.First().ToDoItems.Add(new ToDoItem { Name = "Check Emails" });
-
-            //lists.Last().ToDoItems.Add(new ToDoItem { Name = "Bread" });
-            //lists.Last().ToDoItems.Add(new ToDoItem { Name = "Milk" });
-            //lists.Last().ToDoItems.Add(new ToDoItem { Name = "Dinner" });
-
-            //context.SaveChanges();
         }
 
         public async Task<List<ToDoList>> GetTasks()

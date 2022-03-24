@@ -13,8 +13,8 @@
 	@foreach (var list in ToDos)
 	{
 		
-		<card class="todolist col-md-6">
-			<h3 class="text-center">@list.Name.ToUpper()</h3>
+		<card class="card todolist col-md-6">
+			<h3 class="text-center">@list.Title.ToUpper()</h3>
 
 			@if (ToDos.Count > 0 && ToDos != null)
 			{
@@ -23,9 +23,13 @@
 			}
 
 			<EditForm class="form-inline my-2" Model="@newItem">
-				<InputText class="form-control d-inline-block mx-2" @bind-Value="newItem.Name" />
-				<button class="btn btn-outline-primary float-end" type="submit" 
-					@onclick="(() => AddItems(list))">Add Task</button>
+				<div class="row me-0">
+					<div class="col-10">
+						<InputTextArea class="form-control mx-2 col-10" placeholder="New Task..." @bind-Value="newItem.Title" />
+					</div>
+					<button class="btn btn-outline-primary float-end col-2" type="submit" 
+						@onclick="(() => AddItems(list))">Add Task</button>
+				</div>
 			</EditForm>
 
 			<ul class="list-group">
@@ -40,11 +44,11 @@
 						<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
 							@if (item.IsComplete)
 							{
-								<del>@item.Name</del>
+								<del>@item.Title</del>
 							}
 							else
 							{
-								@item.Name
+								@item.Title
 							}
 						</span>
 						</span>
@@ -75,14 +79,6 @@
 	{
 		ToDos = await ToDoCRUDService.GetToDoLists();
 	}
-
-
-
-	//private int PercentDone(ToDoList toDolist)
-	//{
-	//	string percentDone = ((toDolist.ToDoItems.Count(x => x.IsComplete) * 100) / toDolist.ToDoItems.Count).ToString();
-	//	return int.Parse(percentDone);
-	//}
 
 	private void AddItems(ToDoList list)
 	{

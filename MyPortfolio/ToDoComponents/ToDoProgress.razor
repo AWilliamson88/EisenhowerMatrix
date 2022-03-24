@@ -1,11 +1,14 @@
 ﻿@using DataModels.Models
 
 <div class="progress my-2">
-	<div class="progress-bar" role="progressbar"
-			style="width: @(percentDone)%"
-			aria-valuemin="0" aria-valuemax="100">
-		@(percentDone)%
-	</div>
+	@if(toDoList.ToDoItems.Count > 0) 
+	{
+		<div class="progress-bar" role="progressbar"
+				style="width: @(percentDone)%"
+				aria-valuemin="0" aria-valuemax="100">
+			@(percentDone)%
+		</div>
+	}
 </div>
 
 @code {
