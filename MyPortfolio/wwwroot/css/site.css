@@ -1,7 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-card.todolist {
-
+.modal {
+    display: inherit;
 }
 
 input.form-control {

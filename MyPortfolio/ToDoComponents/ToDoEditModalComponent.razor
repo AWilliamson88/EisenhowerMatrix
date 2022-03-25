@@ -1,0 +1,65 @@
+﻿@using DataModels.Models
+
+<button @onclick="@LoadModal" 
+    data-bs-toggle="modal" data-bs-target="#editModal" class="btn btn-outline-info float-end glyphicon glyphicon-edit">
+    Edit
+</button>
+
+@if (toDoItem != null)
+{
+	<div class="modal fade show" id="editModal" tabindex="-1" aria-modal="true" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h4 class="modal-title">Edit this item.</h4>
+				<button type="button" class="btn-close"
+			data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="card">
+						<EditForm Model="@toDoItem">
+						<InputTextArea  @bind-Value="@toDoItem.Title"></InputTextArea>
+						<InputTextArea @bind-Value="@toDoItem.Description"></InputTextArea>
+						</EditForm>
+					<div class="card-body">
+
+					</div>
+				</div>
+				</div>
+				<div class="modal-footer">
+				<button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
+					Cancel</button>
+				<button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Save" @onclick="@Save" >
+					Save
+				</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+
+	[Parameter]
+	public ToDoItem CurrentItem { get; set; }
+
+	ToDoItem toDoItem;
+
+	[Parameter]
+	public EventCallback<MouseEventArgs> SaveChanges { get; set; }
+
+	void Save(MouseEventArgs e)
+	{
+		CurrentItem.Title = toDoItem.Title;
+		CurrentItem.Description = toDoItem.Description;
+		SaveChanges.InvokeAsync(e);
+	}
+
+	void LoadModal()
+	{
+		toDoItem = new ToDoItem();
+		toDoItem.Title = CurrentItem.Title; 
+		toDoItem.Description = CurrentItem.Description;
+	}
+
+}
