@@ -1,11 +1,31 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css');
 
 .modal {
-    display: inherit;
+    display: block;
+    z-index: 1;
+}
+
+.editmodal-backdrop-overlay {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    z-index: 3;
 }
 
 input.form-control {
     width: auto;
+}
+
+.fa {
+    color: black;
 }
 
 html, body {
