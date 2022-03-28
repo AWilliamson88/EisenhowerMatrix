@@ -1,5 +1,29 @@
 @import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css');
 
+input.form-control {
+    width: auto;
+}
+
+.add-item {
+    display: none;
+}
+
+.add-item-symbol {
+    display: inline-block;
+}
+
+.item-button-text {
+    display: none;
+}
+
+.fa {
+    color: inherit;
+}
+
+.todolist {
+    display: flex;
+}
+
 .modal {
     display: block;
     z-index: 1;
@@ -20,13 +44,7 @@
     z-index: 3;
 }
 
-input.form-control {
-    width: auto;
-}
 
-.fa {
-    color: black;
-}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -90,3 +108,17 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+@media (min-width: 1200px) {
+    .add-item {
+        display: inline-block;
+    }
+
+    .fa.add-symbol {
+        display: none;
+    }
+
+    .item-button-text {
+        display: inline-block;
+    }
+}

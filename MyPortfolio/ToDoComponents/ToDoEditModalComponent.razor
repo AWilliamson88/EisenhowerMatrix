@@ -2,10 +2,10 @@
 
 
 
-<button type="button" class="btn btn-outline-info float-end"
+<button type="button" class="btn btn-outline-info todo-item-button float-end me-2 fw-bold"
     data-bs-toggle="modal" data-bs-target="#editModal" @onclick="@LoadModal">
-	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;
-    Edit
+	<i class="fa fa-pencil-square-o fw-bold" aria-hidden="true"></i>
+    <span class="item-button-text">Edit</span>
 </button>
 
 @if (toDoItem != null)

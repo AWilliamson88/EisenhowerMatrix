@@ -7,14 +7,16 @@
 @using UIServices
 @inject IUIToDoListService ToDoCRUDService
 
-<h1>Welcome To The ToDo List Page</h1>
+<h1 class="text-center text-decoration-underline todo-title">The ToDo List Matrix</h1>
+
+<hr />
 
 <pannel class="row">
 	@foreach (var list in ToDos)
 	{
 
-		<card class="card todolist col-md-6">
-			<h3 class="text-center">@list.Title.ToUpper()</h3>
+		<card class="card todolist col-12 col-md-6 my-2">
+			<h3 class="text-center list-header py-3">@list.Title.ToUpper()</h3>
 
 			@if (ToDos.Count > 0 && ToDos != null)
 			{
@@ -25,11 +27,12 @@
 			<EditForm class="form-inline my-2" Model="@newItem">
 				<div class="row me-0">
 					<div class="col-10">
-						<InputTextArea class="form-control mx-2 col-10" placeholder="New Task..." @bind-Value="newItem.Title" />
+						<InputTextArea class="form-control col-10" placeholder="New Task..." @bind-Value="newItem.Title" />
 					</div>
 					<button class="btn btn-outline-primary float-end col-2" type="submit"
 						@onclick="(() => AddItems(list))">
-						Add Task
+						<span class="add-item fw-bold">Add Item</span>
+						<i class="add-symbol fa fa-plus fw-bold"></i>
 					</button>
 				</div>
 			</EditForm>
@@ -37,8 +40,8 @@
 			<ul class="list-group">
 				@foreach (var item in list.ToDoItems)
 				{
-					<li class="list-group-item list-group-item-success my-1">
-						<span class="todo-item" @onclick="(() => UpdateItem(item))">
+					<li class="list-group-item my-1">
+						<span @onclick="(() => UpdateItem(item))">
 							<EditForm class="form-check-inline pe-2" Model="@item">
 								<InputCheckbox class="form-check position-absolute top-50 translate-middle-y "
 									   @bind-Value="item.IsComplete" />
@@ -46,7 +49,7 @@
 							<span class="todoitem todoitem-name position-absolute top-50 translate-middle-y">
 								@if (item.IsComplete)
 								{
-									<del>@item.Title</del>
+									<del class="text-muted">@item.Title</del>
 								}
 								else
 								{
@@ -55,11 +58,13 @@
 							</span>
 						</span>
 						
-						<ToDoEditModalComponent CurrentItem="@item" SaveChanges="UpdateItemData"></ToDoEditModalComponent>
-
-						<button class="btn btn-outline-danger float-end glyphicon glyphicon-trash todo-trash" type="button"
+						<button class="btn btn-outline-danger float-end todo-item-button fw-bold" type="button"
 						@onclick="(() => Delete(list, item))">
+						<i class="fa fa-trash"></i>
+						<span class="item-button-text">Delete</span>
 						</button>
+
+						<ToDoEditModalComponent CurrentItem="@item" SaveChanges="UpdateItemData"></ToDoEditModalComponent>
 					</li>
 				}
 			</ul>
