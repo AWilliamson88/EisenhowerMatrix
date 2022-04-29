@@ -4,7 +4,6 @@ namespace BusinessLogic.Services
 {
     public interface IToDoDataService
     {
-        void InitialiseDb();
         void AddLists(IEnumerable<ToDoList> lists);
         Task<List<ToDoList>> GetTasks();
         void SaveChanges();

@@ -1,7 +1,4 @@
 ﻿using DataModels.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Json;
-using System.Web.Http;
 
 namespace UI.UIServices
 {
@@ -37,6 +34,5 @@ namespace UI.UIServices
 
             return (int)result.StatusCode;
         }
-
     }
 }
