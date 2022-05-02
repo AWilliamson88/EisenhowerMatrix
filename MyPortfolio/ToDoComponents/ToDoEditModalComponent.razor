@@ -23,8 +23,15 @@
 				<div class="modal-body">
 					<div class="container-fluid">
 						<EditForm Model="@toDoItem">
-						<InputTextArea  @bind-Value="@toDoItem.Title"></InputTextArea>
-						<InputTextArea @bind-Value="@toDoItem.Description"></InputTextArea>
+							<div>
+								<h5>Title:</h5>
+								<InputTextArea cols="40" @bind-Value="@toDoItem.Title"></InputTextArea>
+							</div>
+							<hr>
+							<div>
+								<h5>Description:</h5>
+								<InputTextArea cols="40" @bind-Value="@toDoItem.Description"></InputTextArea>
+							</div>
 						</EditForm>
 						
 					</div>

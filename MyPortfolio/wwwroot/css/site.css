@@ -29,6 +29,10 @@ input.form-control {
     z-index: 1;
 }
 
+.modal-dialog-centered {
+    justify-content: center;
+}
+
 .editmodal-backdrop-overlay {
     display: block;
     position: fixed;
@@ -42,6 +46,7 @@ input.form-control {
 
 .modal-content {
     z-index: 3;
+    width: auto;
 }
 
 
