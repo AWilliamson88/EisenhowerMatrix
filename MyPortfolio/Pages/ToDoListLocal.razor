@@ -1,0 +1,134 @@
+﻿@page "/localtodo"
+
+<PageTitle>To Do List Matrix</PageTitle>
+
+@using DataModels.Models
+@using UI.ToDoComponents
+@using UIServices
+@inject LocalStorageService Storage
+@inject DefaultDataService Default
+
+
+
+<h1 class="text-center todo-title">Local ToDo List</h1>
+<p class="text-center">A ToDo list saved in your local storage.</p>
+<hr />
+
+@if (ToDos.Count > 0)
+{
+	<div class="container">
+		<div class="row justify-content-around">
+			@foreach (ToDoList list in ToDos)
+			{
+				<div class="col col-5">
+					<div class="list-group mb-4">
+						<div class="d-flex w-100
+						justify-content-between
+						list-group-item
+						active">
+							<h5 class="mb-1">@list.Title</h5>
+							<small>3 days ago</small>
+						</div>
+
+						@foreach (ToDoItem item in list.ToDoItems)
+						{
+							<EditForm class="form-inline" Model="item">
+								<label class="list-group-item">
+									<input type="checkbox" class="form-check-input me-2"
+							   checked="@item.IsComplete" @onchange="e => UpdateItem(item)" />
+									@if (item.IsComplete)
+									{
+										<del class="text-muted">@item.Title</del>
+									}
+									else
+									{
+										@item.Title
+									}
+									<button class="btn btn-outline-danger float-end todo-item-button fw-bold" type="button"
+								@onclick="(() => Delete(list, item))">
+										<i class="fa fa-trash"></i>
+										<span class="item-button-text">Delete</span>
+									</button>
+								</label>
+							</EditForm>
+
+						}
+						<EditForm class="form-inline list-group-item d-initial" Model="@newItem">
+							<InputText placeholder="New Task..." @bind-Value="newItem.Title" />
+							<button class="btn btn-outline-primary float-end todo-item-button fw-bold" type="submit"
+							@onclick="(() => AddItems(list))">
+								<i class="fa fa-plus"></i>
+								<span class="item-button">Add Item</span>
+							</button>
+						</EditForm>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+else {
+	<p>Loading...</p>
+}
+
+@code {
+	private List<ToDoList> ToDos = new List<ToDoList>();
+	private ToDoList currentList = new ToDoList();
+	private ToDoItem newItem = new ToDoItem();
+	const string MatrixKey = "tdMatrixKey";
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await GetToDoLists();
+			StateHasChanged();
+		}
+	}
+
+	private async Task SetToDoList()
+	{
+		string listString = System.Text.Json.JsonSerializer.Serialize(ToDos);
+		await Storage.SetLocalStorage(MatrixKey, listString);
+	}
+
+	private async Task GetToDoLists()
+	{
+		string stringList = await Storage.GetFromLocalStorage(MatrixKey);
+
+		if (stringList != null && stringList != "[]")
+		{
+			List<ToDoList> newList = System.Text.Json.JsonSerializer.Deserialize<List<ToDoList>>(stringList);
+			ToDos = newList != null ? newList : ToDos;
+		}
+		else
+		{
+			ToDos = await Default.GetDefaultTDMatrix();
+		}
+	}
+
+	private async Task AddItems(ToDoList list)
+	{
+		list.ToDoItems.Add(newItem);
+		newItem = new ToDoItem();
+		await SetToDoList();
+	}
+
+	public async Task UpdateItem(ToDoItem item)
+	{
+		item.IsComplete = !item.IsComplete;
+		await SetToDoList();
+	}
+
+	private async Task UpdateItemData()
+	{
+		await SetToDoList();
+	}
+
+	private async Task Delete(ToDoList list, ToDoItem item)
+	{
+		list.ToDoItems.Remove(item);
+		await SetToDoList();
+	}
+
+}
