@@ -15,6 +15,9 @@ input.form-control {
 .item-button-text {
     display: none;
 }
+.todo-item-button {
+    padding: 0px 7px;
+}
 
 .fa {
     color: inherit;

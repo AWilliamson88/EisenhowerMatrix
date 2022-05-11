@@ -58,13 +58,15 @@
 	ToDoItem toDoItem;
 
 	[Parameter]
-	public EventCallback<MouseEventArgs> SaveChanges { get; set; }
+	public EventCallback<ToDoItem> SaveChanges { get; set; }
 
 	void Save(MouseEventArgs e)
 	{
 		CurrentItem.Title = toDoItem.Title;
 		CurrentItem.Description = toDoItem.Description;
-		SaveChanges.InvokeAsync(e);
+		SaveChanges.InvokeAsync(CurrentItem);
+		toDoItem = null;
+		StateHasChanged();
 	}
 
 	void LoadModal()
