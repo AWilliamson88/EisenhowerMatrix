@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "MyPortfolio": {
+    "Blazor-ToDos": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
