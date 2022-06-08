@@ -22,7 +22,7 @@ namespace Api.Controllers
         {
             IEnumerable<ToDoList> listModels = await toDoDbService.GetTasks();
             if (!listModels.Any())
-                listModels = new List<ToDoList> { new ToDoList() };
+                return NotFound();
 
             return Ok(listModels);
         }

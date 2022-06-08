@@ -16,7 +16,7 @@ namespace BusinessLogic.Services
             context = _context;
         }
 
-        public async Task<List<ToDoList>> GetTasks()
+        public async Task<IEnumerable<ToDoList>> GetTasks()
         {
             return await context.ToDoLists.Include(l => l.ToDoItems).Distinct().ToListAsync();
         }
