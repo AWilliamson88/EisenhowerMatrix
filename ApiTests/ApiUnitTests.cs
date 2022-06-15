@@ -44,7 +44,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async void GetLists_ListsReturned_ContainToDoItems()
+        public async void GetLists_ListsReturned_ContainToDoItemsList()
         {
             // Arrange
             int count = 4;
@@ -81,79 +81,123 @@ namespace ApiTests
         // itemID incorrect returns error.
     // MethodName_StateUnderTest_ExpectedBehavior:
         [Fact]
-        public async void DeleteItem_Returns_NoContent()
+        public async void DeleteItem_DeleteValidItem_ReturnsNoContent()
         {
             // Arrange
             int count = 4;
-            int itemId = 0;
-            int listId = 0;
+            int itemId = 2;
+            int listId = 2;
             var controller = GetController(count);
 
             // Act
             var actionResult = await controller.DeleteItem(listId, itemId);
 
             // Assert
-            Assert.IsType<NotFoundResult>(actionResult);
+            Assert.IsType<NoContentResult>(actionResult);
+        }
+
+        [Fact]
+        public async void DeleteItem_DeleteInvalidItem_ReturnsNotFound()
+        {
+            // Arrange
+            int count = 4;
+            int itemId = 5;
+            int listId = 5;
+            var controller = GetController(count);
+
+            // Act
+            var actionResult = await controller.DeleteItem(listId, itemId);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(actionResult);
+        }
+
+        [Fact]
+        public async void DeleteItem_BadItemId_ReturnsBadRequestResult()
+        {
+            // Arrange
+            int count = 4;
+            int itemId = 0;
+            int listId = 2;
+            var controller = GetController(count);
+
+            // Act
+            var actionResult = await controller.DeleteItem(listId, itemId);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(actionResult);
+        }
+
+        [Fact]
+        public async void DeleteItem_BadListId_ReturnsBadRequestResult()
+        {
+            // Arrange
+            int count = 4;
+            int itemId = 2;
+            int listId = -2;
+            var controller = GetController(count);
+
+            // Act
+            var actionResult = await controller.DeleteItem(listId, itemId);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(actionResult);
         }
         
-        [Fact]
-        public void DeleteItem_Deletes_Item()
-        {
-
-        }
-
-        [Fact]
-        public void DeleteItem_Deletes_OnlyOneItem()
-        {
-
-        }
-
-        [Fact]
-        public void DeleteItem_ItemIdOutOfRange_ReturnsBadRequestResult()
-        {
-
-        }
-
-        [Fact]
-        public void DeleteItem_ListIdOutOfRange_ReturnsBadRequestResult()
-        {
-
-        }
         // AddItems(int listID, IEnumerable<ToDoItem> items)
         // Incorrect itemId results in error.
         // Incorrect ListId results in error.
         // One item is added successfully
         // multiple items are added successfully.
-
         [Fact]
-        public void AddItems_Requires_CorrectItemId()
+        public async void AddItems_ListIdInvalid_ReturnsBadRequest()
         {
+            // Arrange
+            int count = 4;
+            int listId = 0;
+            var validItem = A.Fake<IEnumerable<ToDoItem>>();
+            var controller = GetController(count);
 
+            // Act
+            var actionResult = await controller.PutAddItems(listId, validItem);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(actionResult);
         }
 
         [Fact]
-        public void AddItems_Requires_CorrectListId()
+        public async void AddItems_ValidInput_ReturnsOk()
         {
+            // Arrange
+            int count = 4;
+            int listId = 1;
+            var validItem = new List<ToDoItem>();
+            validItem.Add(A.Fake<ToDoItem>());
+            var controller = GetController(count);
 
+            // Act
+            var actionResult = await controller.PutAddItems(listId, validItem);
+
+            // Assert
+            Assert.IsType<OkResult>(actionResult);
         }
 
         [Fact]
-        public void AddItems_SuccessfullyAdds_OneItem()
+        public async void AddItems_NonExistantList_ReturnsNotFound()
         {
+            // Arrange
+            int count = 4;
+            int listId = 5;
+            var validItem = A.Fake<IEnumerable<ToDoItem>>();
+            var controller = GetController(count);
 
+            // Act
+            var actionResult = await controller.PutAddItems(listId, validItem);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult);
         }
 
-        [Fact]
-        public void AddItems_SuccessfullyAdds_MultipleItems()
-        {
-
-        }
-
-        [Fact]
-        public void AddItems_ReturnsCorrect_Responsetype()
-        {
-
-        }
         // UpdateItem(ToDoItem item)
         // The Item is updated.
         // Number of items doesn't change.
@@ -166,6 +210,14 @@ namespace ApiTests
             var fakeLists = A.CollectionOfDummy<ToDoList>(count).AsEnumerable();
             var database = A.Fake<IToDoDataService>();
             A.CallTo(() => database.GetTasks()).Returns(Task.FromResult(fakeLists));
+            A.CallTo(() => database.Delete(A<int>.Ignored, A<int>.Ignored))
+                .ReturnsLazily((int listId, int itemId) =>
+                    listId <= count && itemId <= count ? 1 : 0);
+            A.CallTo(() => database.ListAddItems(
+                A<int>.Ignored, A<IEnumerable<ToDoItem>>.Ignored))
+                .ReturnsLazily((int listId, IEnumerable<ToDoItem> items) => 
+                listId <= count && items.Any() ? 1 : 0);
+
             return new ToDoListController(database);
         }
     }
