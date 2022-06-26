@@ -63,12 +63,12 @@
 										@item.Title
 									}
 								</span>
+							</span>
 								<button class="btn btn-outline-danger float-end todo-item-button fw-bold" type="button"
 							@onclick="(() => Delete(list, item))">
 									<i class="fa fa-trash"></i>
 									<span class="item-button-text">Delete</span>
 								</button>
-							</span>
 
 							<ToDoEditModalComponent CurrentItem="@item" SaveChanges="UpdateItemData"></ToDoEditModalComponent>
 
