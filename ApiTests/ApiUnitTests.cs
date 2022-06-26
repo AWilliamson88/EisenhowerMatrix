@@ -144,7 +144,7 @@ namespace ApiTests
             var validItem = A.Fake<IEnumerable<ToDoItem>>();
 
             // Act
-            var actionResult = await controller.PutAddItems(listId, validItem);
+            var actionResult = await controller.AddItems(listId, validItem);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(actionResult);
@@ -159,7 +159,7 @@ namespace ApiTests
             validItem.Add(A.Fake<ToDoItem>());
 
             // Act
-            var actionResult = await controller.PutAddItems(listId, validItem);
+            var actionResult = await controller.AddItems(listId, validItem);
 
             // Assert
             Assert.IsType<OkResult>(actionResult);
@@ -173,7 +173,7 @@ namespace ApiTests
             var validItem = A.Fake<IEnumerable<ToDoItem>>();
 
             // Act
-            var actionResult = await controller.PutAddItems(listId, validItem);
+            var actionResult = await controller.AddItems(listId, validItem);
 
             // Assert
             Assert.IsType<NotFoundResult>(actionResult);

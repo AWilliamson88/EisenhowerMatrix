@@ -1,6 +1,5 @@
 ﻿using BusinessLogic.Services;
 using DataModels.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -39,8 +38,8 @@ namespace Api.Controllers
         }
 
         [HttpPut]
-        [Route("PutItems")]
-        public async Task<ActionResult> PutAddItems(int listId, IEnumerable<ToDoItem> items)
+        [Route("AddItems")]
+        public async Task<ActionResult> AddItems(int listId, IEnumerable<ToDoItem> items)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid model");
@@ -52,7 +51,7 @@ namespace Api.Controllers
         }
 
         [HttpPut]
-        [Route("PutItem")]
+        [Route("UpdateItem")]
         public async Task<ActionResult> UpdateItem(ToDoItem item)
         {
             if (!ModelState.IsValid || item == null)
