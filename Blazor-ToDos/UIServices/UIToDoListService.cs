@@ -13,24 +13,29 @@ namespace UI.UIServices
 
         public async Task<List<ToDoList>> GetToDoLists()
         {
-            return await httpClient.GetFromJsonAsync<List<ToDoList>>("api/ToDoList/GetLists");
+            return await httpClient.GetFromJsonAsync<List<ToDoList>>(
+                "api/ToDoList/GetLists"
+                );
         }
 
         public void Delete(int listId, int itemId)
         {
             httpClient.DeleteAsync(
-                "api/ToDoList/Delete?listId=" + listId + 
-                "&itemId=" + itemId);
+                $"api/ToDoList/Delete?listId={listId}&itemId={itemId}"
+                );
         }
 
         public async void UpdateItem(ToDoItem item)
         {
-            await httpClient.PutAsJsonAsync("api/ToDoList/PutItem", item);
+            await httpClient.PutAsJsonAsync(
+                "api/ToDoList/updateItem", item
+                );
         }
 
         public async Task<int> AddItems(int listId, ICollection<ToDoItem> items)
         {
-            var result = await httpClient.PutAsJsonAsync($"api/ToDoList/PutItems?listId={listId}", items);
+            var result = await httpClient.PutAsJsonAsync(
+                $"api/ToDoList/AddItems?listId={listId}", items);
 
             return (int)result.StatusCode;
         }
