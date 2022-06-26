@@ -28,7 +28,7 @@
 						list-group-item
 						active">
 							<h5 class="mb-1">@list.Title</h5>
-							<small>3 days ago</small>
+							<small>@list.ToDoItems.Count @(list.ToDoItems.Count == 1 ? "task" : "tasks")</small>
 						</div>
 
 						@foreach (ToDoItem item in list.ToDoItems)
