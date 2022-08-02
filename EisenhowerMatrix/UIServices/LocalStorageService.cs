@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
-namespace UI.UIServices
+namespace EisenhowerMatrix.UIServices
 {
     public class LocalStorageService
     {

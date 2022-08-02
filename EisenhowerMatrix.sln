@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "Blazor-ToDos\UI.csproj", "{8E33DAD3-28D4-4903-9895-00ED4BB61210}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModels", "DataModels\DataModels.csproj", "{DDFF5A06-3730-482D-95B0-FAB89D930F13}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{4FA16B33-4574-4B5A-A207-473D6091F42E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{7E89056A-E1D5-4B79-A0BA-B3953055FD43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTests", "ApiTests\ApiTests.csproj", "{8001BD45-9F53-4E20-9DB6-BB8712BBBD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTests", "ApiTests\ApiTests.csproj", "{8001BD45-9F53-4E20-9DB6-BB8712BBBD0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EisenhowerMatrix", "EisenhowerMatrix\EisenhowerMatrix.csproj", "{9C509762-E385-4435-A65C-217312A086C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8E33DAD3-28D4-4903-9895-00ED4BB61210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E33DAD3-28D4-4903-9895-00ED4BB61210}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E33DAD3-28D4-4903-9895-00ED4BB61210}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E33DAD3-28D4-4903-9895-00ED4BB61210}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDFF5A06-3730-482D-95B0-FAB89D930F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDFF5A06-3730-482D-95B0-FAB89D930F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDFF5A06-3730-482D-95B0-FAB89D930F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{8001BD45-9F53-4E20-9DB6-BB8712BBBD0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8001BD45-9F53-4E20-9DB6-BB8712BBBD0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8001BD45-9F53-4E20-9DB6-BB8712BBBD0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C509762-E385-4435-A65C-217312A086C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C509762-E385-4435-A65C-217312A086C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C509762-E385-4435-A65C-217312A086C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C509762-E385-4435-A65C-217312A086C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

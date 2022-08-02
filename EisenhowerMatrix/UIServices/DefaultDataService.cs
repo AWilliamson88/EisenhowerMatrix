@@ -1,7 +1,6 @@
 ﻿using DataModels.Models;
-using System.Collections.Generic;
 
-namespace UI.UIServices
+namespace EisenhowerMatrix.UIServices
 {
     public class DefaultDataService
     {

@@ -1,6 +1,6 @@
 ﻿using DataModels.Models;
 
-namespace UI.UIServices
+namespace EisenhowerMatrix.UIServices
 {
     public class UIToDoListService : IUIToDoListService
     {

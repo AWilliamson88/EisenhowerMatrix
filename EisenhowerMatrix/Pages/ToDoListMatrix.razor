@@ -1,15 +1,14 @@
-﻿@page "/todomatrix"
+﻿@page "/database"
 
-<PageTitle>To Do Lists</PageTitle>
+<PageTitle>Eisenhower Matrix - Database</PageTitle>
 
 @using DataModels.Models
-@using UI.ToDoComponents
+@using EisenhowerMatrix.ToDoComponents
 @using UIServices
 @inject IUIToDoListService ToDoCRUDService
 
-<h1 class="text-center text-decoration-underline todo-title">The ToDo List Matrix</h1>
-<p class="text-center">A todo list mixed with the Isenhower matrix.</p>
-<p class="text-center">This list is saved to an sql server via an api.</p>
+<h1 class="text-center text-decoration-underline todo-title">Eisenhower Matrix - Database</h1>
+<p class="text-center">Saved to an Entity Framework sql server, via an api.</p>
 <hr />
 
 <pannel class="row">

@@ -1,18 +1,15 @@
-﻿@page "/localtodo"
+﻿@page "/localstorage"
 
-<PageTitle>Local ToDo List</PageTitle>
+<PageTitle>Eisenhower Matrix - Local</PageTitle>
 
 @using DataModels.Models
-@using UI.ToDoComponents
+@using EisenhowerMatrix.ToDoComponents
 @using UIServices
 @inject LocalStorageService Storage
 @inject DefaultDataService Default
 
-
-
-<h1 class="text-center todo-title">Local ToDo List</h1>
-<p class="text-center">A todo list mixed with the Isenhower matrix.
-	Saved in your local storage.</p>
+<h1 class="text-center todo-title">Eisenhower Matrix - Local</h1>
+<p class="text-center">Saved in your local storage.</p>
 <hr />
 
 @if (ToDos.Count > 0)
