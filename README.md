@@ -1,23 +1,22 @@
-# Blazor-ToDo's
-Blazor-Server app with different todo lists:
-* One stores the lists in a database via and api. 
-* The second stores the lists in your local storage. 
+# Eisenhower Matrix
+Blazor-Server app with different Eisenhower Matrix's:
+1. One stores the data in an Entity Framework SQL database via and API. 
+2. The second stores the data in your local storage. 
 
-## #1 To-Do Matrix  (API & EF Core)
-A todo list mixed with the Isenhower prioritization matrix. 
+## #1 Database (API & EF Core)
+Eisenhower prioritisation matrix. 
 * The server setup and management using Entity Framework Core.
 * Server access through a CRUD API.
 
 <p>
-<img src="Blazor-ToDos/Images/BlazorToDo-Api.png" alt="image of a to do list" style="width: 650px" />
+<img src="EisenhowerMatrix/Images/Database.png" alt="image of an Eisenhower Matrix" style="width: 650px" />
      </p>
 
-## #2 To-Do Local  (Local Storage)
-A todo list mixed with the Isenhower prioritization matrix. 
+## #2 Local Storage
+Eisenhower prioritisation matrix. 
 * Lists are stored and retrieved from your local storage.
 
-
 <p>
-<img src="Blazor-ToDos/Images/BlazorToDo-LocalStorage.png" alt="image of a to do list" style="width: 650px" />
+<img src="EisenhowerMatrix/Images/LocalStorage.png" alt="image of an Eisenhower Matrix" style="width: 650px" />
      </p>
 
