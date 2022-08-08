@@ -1,7 +1,7 @@
 ﻿@using DataModels.Models
 
 <div class="progress my-2">
-	@if(toDoList.ToDoItems.Count > 0) 
+	@if(List.EMListItems.Count > 0) 
 	{
 		<div class="progress-bar" role="progressbar"
 				style="width: @(percentDone)%"
@@ -13,13 +13,13 @@
 
 @code {
 	[Parameter]
-	public ToDoList toDoList { get; set; }
+	public EMList List { get; set; }
 
 	private int percentDone
 	{
 		get
 		{
-			return (toDoList.ToDoItems.Count(x => x.IsComplete) * 100) / toDoList.ToDoItems.Count;
+			return (List.EMListItems.Count(x => x.IsComplete) * 100) / List.EMListItems.Count;
 		}
 	}
 

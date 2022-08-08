@@ -6,20 +6,20 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ToDoListController : ControllerBase
+    public class EMController : ControllerBase
     {
-        private readonly IToDoDataService toDoDbService;
+        private readonly IEMDataService DbService;
 
-        public ToDoListController(IToDoDataService _listService)
+        public EMController(IEMDataService service)
         {
-            toDoDbService = _listService;
+            DbService = service;
         }
 
         [HttpGet]
         [Route("GetLists")]
-        public async Task<ActionResult<IEnumerable<ToDoList>>> GetLists()
+        public async Task<ActionResult<IEnumerable<EMList>>> GetLists()
         {
-            IEnumerable<ToDoList> listModels = await toDoDbService.GetTasks();
+            IEnumerable<EMList> listModels = await DbService.GetTasks();
             if (!listModels.Any())
                 return NotFound();
 
@@ -33,31 +33,31 @@ namespace Api.Controllers
             if (listId <= 0 || itemId <= 0)
                 return BadRequest("List or item id not valid");
 
-            int result = await toDoDbService.Delete(listId, itemId);
+            int result = await DbService.Delete(listId, itemId);
             return result == 0 ? NotFound("Item not found") : NoContent();
         }
 
         [HttpPut]
         [Route("AddItems")]
-        public async Task<ActionResult> AddItems(int listId, IEnumerable<ToDoItem> items)
+        public async Task<ActionResult> AddItems(int listId, IEnumerable<EMListItem> items)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid model");
             if (listId <= 0)
                 return BadRequest("Not a valid list number");
 
-            int response = await toDoDbService.ListAddItems(listId, items);
+            int response = await DbService.ListAddItems(listId, items);
             return response > 0 ? Ok() : NotFound();
         }
 
         [HttpPut]
         [Route("UpdateItem")]
-        public async Task<ActionResult> UpdateItem(ToDoItem item)
+        public async Task<ActionResult> UpdateItem(EMListItem item)
         {
             if (!ModelState.IsValid || item == null)
                 return BadRequest("Not a valid todo item");
 
-            int response = await toDoDbService.UpdateItem(item);
+            int response = await DbService.UpdateItem(item);
             return response > 0 ? Ok() : NotFound();
         }
 

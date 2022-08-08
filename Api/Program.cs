@@ -1,7 +1,7 @@
+using Api;
 using BusinessLogic.Services;
 using DataModels.Models;
 using Microsoft.EntityFrameworkCore;
-using Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,14 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<PortfolioContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioConnection"),
+builder.Services.AddDbContext<EMDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("EMConnection"),
                 assembly => assembly.MigrationsAssembly(
-                    typeof(PortfolioContext).Assembly.FullName))
+                    typeof(EMDbContext).Assembly.FullName))
                 );
-
-builder.Services.AddScoped<IToDoDataService, ToDoDataService>();
+builder.Services.AddScoped<IEMDataService, EMDataService>();
+builder.Services.AddTransient<IDataSeeder, DataSeeder>();
 
 var app = builder.Build();
 
@@ -26,11 +25,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.CreateScope())
+var scopedFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+
+using (var scope = scopedFactory.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    var InitialisationService = services.GetRequiredService<IToDoDataService>();
+    var dataSeeder = services.GetRequiredService<IDataSeeder>();
+    dataSeeder.Seed();
 }
 
 app.UseHttpsRedirection();

@@ -3,29 +3,26 @@
 <PageTitle>Eisenhower Matrix - Database</PageTitle>
 
 @using DataModels.Models
-@using EisenhowerMatrix.ToDoComponents
+@using EisenhowerMatrix.Components
 @using UIServices
-@inject IUIToDoListService ToDoCRUDService
+@inject IUIDatabaseService CRUDService
 
 <h1 class="text-center text-decoration-underline todo-title">Eisenhower Matrix - Database</h1>
 <p class="text-center">Saved to an Entity Framework sql server, via an api.</p>
 <hr />
 
 <pannel class="row">
-	@if (ToDos.Count > 0)
+	@if (Lists.Count > 0)
 	{
-
-
-		@foreach (var list in ToDos)
+		@foreach (var list in Lists)
 		{
-
-			<card class="card todolist col-12 col-md-6 my-2">
+			<card class="card mylist col-12 col-md-6 my-2">
 				<h3 class="text-center list-header py-3">@list.Title.ToUpper()</h3>
 
-				@if (ToDos.Count > 0 && ToDos != null)
+				@if (Lists != null && Lists.Count > 0)
 				{
 					currentList = list;
-					<ToDoProgress toDoList="@list"></ToDoProgress>
+					<ProgressBar List="@list"></ProgressBar>
 				}
 
 				<EditForm class="form-inline my-2" Model="@newItem">
@@ -42,7 +39,7 @@
 				</EditForm>
 
 				<ul class="list-group">
-					@foreach (var item in list.ToDoItems)
+					@foreach (var item in list.EMListItems)
 					{
 						<li class="list-group-item my-1">
 
@@ -63,13 +60,13 @@
 									}
 								</span>
 							</span>
-								<button class="btn btn-outline-danger float-end todo-item-button fw-bold" type="button"
+								<button class="btn btn-outline-danger float-end item-button fw-bold" type="button"
 							@onclick="(() => Delete(list, item))">
 									<i class="fa fa-trash"></i>
 									<span class="item-button-text">Delete</span>
 								</button>
 
-							<ToDoEditModalComponent CurrentItem="@item" SaveChanges="UpdateItemData"></ToDoEditModalComponent>
+							<EditModal CurrentItem="@item" SaveChanges="UpdateItemData"></EditModal>
 
 							@if (item.Description.Length > 0)
 							{
@@ -94,43 +91,42 @@
 
 @code {
 
-	private List<ToDoList> ToDos = new List<ToDoList>();
-	private ToDoList currentList = new ToDoList();
-	private ToDoList newList = new ToDoList();
-	private ToDoItem newItem = new ToDoItem();
+	private List<EMList> Lists = new List<EMList>();
+	private EMList currentList = new EMList();
+	private EMListItem newItem = new EMListItem();
 
 	protected override async Task OnInitializedAsync()
 	{
-		await GetToDoLists();
+		await GetLists();
 	}
 
-	private async Task GetToDoLists()
+	private async Task GetLists()
 	{
-		ToDos = await ToDoCRUDService.GetToDoLists();
+		Lists = await CRUDService.GetLists();
 	}
 
-	private void AddItems(ToDoList list)
+	private void AddItems(EMList list)
 	{
-		list.ToDoItems.Add(newItem);
-		ToDoCRUDService.AddItems(list.ToDoListId, list.ToDoItems);
-		newItem = new ToDoItem();
+		list.EMListItems.Add(newItem);
+		CRUDService.AddItems(list.EMListId, list.EMListItems);
+		newItem = new EMListItem();
 	}
 
-	public void UpdateItem(ToDoItem item)
+	public void UpdateItem(EMListItem item)
 	{
 		item.IsComplete = !item.IsComplete;
-		ToDoCRUDService.UpdateItem(item);
+		CRUDService.UpdateItem(item);
 	}
 
-	private void UpdateItemData(ToDoItem item)
+	private void UpdateItemData(EMListItem item)
 	{
-		ToDoCRUDService.UpdateItem(item);
+		CRUDService.UpdateItem(item);
 	}
 
-	private void Delete(ToDoList list, ToDoItem item)
+	private void Delete(EMList list, EMListItem item)
 	{
-		ToDoCRUDService.Delete(list.ToDoListId, item.ToDoItemId);
-		list.ToDoItems.Remove(item);
+		CRUDService.Delete(list.EMListId, item.EMListItemId);
+		list.EMListItems.Remove(item);
 	}
 
 }

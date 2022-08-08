@@ -2,13 +2,13 @@
 
 
 
-<button type="button" class="btn btn-outline-info todo-item-button float-end me-2 fw-bold"
+<button type="button" class="btn btn-outline-info item-button float-end me-2 fw-bold"
     data-bs-toggle="modal" data-bs-target="#editModal" @onclick="@LoadModal">
 	<i class="fa fa-pencil-square-o fw-bold" aria-hidden="true"></i>
     <span class="item-button-text">Edit</span>
 </button>
 
-@if (toDoItem != null)
+@if (Item != null)
 {
 	
 	<div class="modal fade show" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
@@ -22,15 +22,15 @@
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<EditForm Model="@toDoItem">
+						<EditForm Model="@Item">
 							<div>
 								<h5>Title:</h5>
-								<InputTextArea cols="40" @bind-Value="@toDoItem.Title"></InputTextArea>
+								<InputTextArea cols="40" @bind-Value="@Item.Title"></InputTextArea>
 							</div>
 							<hr>
 							<div>
 								<h5>Description:</h5>
-								<InputTextArea cols="40" @bind-Value="@toDoItem.Description"></InputTextArea>
+								<InputTextArea cols="40" @bind-Value="@Item.Description"></InputTextArea>
 							</div>
 						</EditForm>
 						
@@ -53,32 +53,32 @@
 @code {
 
 	[Parameter]
-	public ToDoItem CurrentItem { get; set; }
+	public EMListItem CurrentItem { get; set; }
 
-	ToDoItem toDoItem;
+	EMListItem Item;
 
 	[Parameter]
-	public EventCallback<ToDoItem> SaveChanges { get; set; }
+	public EventCallback<EMListItem> SaveChanges { get; set; }
 
 	void Save(MouseEventArgs e)
 	{
-		CurrentItem.Title = toDoItem.Title;
-		CurrentItem.Description = toDoItem.Description;
+		CurrentItem.Title = Item.Title;
+		CurrentItem.Description = Item.Description;
 		SaveChanges.InvokeAsync(CurrentItem);
-		toDoItem = null;
+		Item = new EMListItem();
 		StateHasChanged();
 	}
 
 	void LoadModal()
 	{
-		toDoItem = new ToDoItem();
-		toDoItem.Title = CurrentItem.Title; 
-		toDoItem.Description = CurrentItem.Description;
+		Item = new EMListItem();
+		Item.Title = CurrentItem.Title; 
+		Item.Description = CurrentItem.Description;
 	}
 
 	void CloseModal()
 	{
-		toDoItem = null;
+		Item = new EMListItem();
 		StateHasChanged();
 	}
 
