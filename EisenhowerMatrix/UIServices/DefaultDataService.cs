@@ -4,29 +4,29 @@ namespace EisenhowerMatrix.UIServices
 {
     public class DefaultDataService
     {
-        public async Task<List<ToDoList>> GetDefaultTDMatrix()
+        public async Task<List<EMList>> GetDefaultData()
         {
-            var lists = new List<ToDoList>();
+            var lists = new List<EMList>();
             await Task.Run(() =>
             {
-                lists = new List<ToDoList>
+                lists = new List<EMList>
                 {
 
-                    new ToDoList {
+                    new EMList {
                         Title = "Urgent & Important",
-                        ToDoItems = new List<ToDoItem>()
+                        EMListItems = new List<EMListItem>()
                     },
-                    new ToDoList {
+                    new EMList {
                         Title = "Urgent & Not-Important",
-                        ToDoItems = new List<ToDoItem>()
+                        EMListItems = new List<EMListItem>()
                     },
-                    new ToDoList {
+                    new EMList {
                         Title = "Not-Urgent & Important",
-                        ToDoItems = new List<ToDoItem>()
+                        EMListItems = new List<EMListItem>()
                     },
-                    new ToDoList {
+                    new EMList {
                         Title = "Not-Urgent & Not-Important",
-                        ToDoItems = new List<ToDoItem>()
+                        EMListItems = new List<EMListItem>()
                     }
                 };
             });

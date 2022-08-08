@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataModels.Migrations
 {
-    [DbContext(typeof(PortfolioContext))]
+    [DbContext(typeof(EMDbContext))]
     [Migration("20220317034440_SecondCreate")]
     partial class SecondCreate
     {

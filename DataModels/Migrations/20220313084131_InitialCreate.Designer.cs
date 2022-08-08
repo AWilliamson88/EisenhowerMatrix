@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataModels.Migrations
 {
-    [DbContext(typeof(PortfolioContext))]
+    [DbContext(typeof(EMDbContext))]
     [Migration("20220313084131_InitialCreate")]
     partial class InitialCreate
     {

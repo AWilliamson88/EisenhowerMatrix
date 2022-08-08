@@ -3,20 +3,20 @@
 <PageTitle>Eisenhower Matrix - Local</PageTitle>
 
 @using DataModels.Models
-@using EisenhowerMatrix.ToDoComponents
+@using EisenhowerMatrix.Components
 @using UIServices
 @inject LocalStorageService Storage
 @inject DefaultDataService Default
 
-<h1 class="text-center todo-title">Eisenhower Matrix - Local</h1>
+<h1 class="text-center">Eisenhower Matrix - Local</h1>
 <p class="text-center">Saved in your local storage.</p>
 <hr />
 
-@if (ToDos.Count > 0)
+@if (Lists.Count > 0)
 {
 	<div class="container">
 		<div class="row justify-content-around">
-			@foreach (ToDoList list in ToDos)
+			@foreach (var list in Lists)
 			{
 				<div class="col col-5">
 					<div class="list-group mb-4">
@@ -25,10 +25,10 @@
 						list-group-item
 						active">
 							<h5 class="mb-1">@list.Title</h5>
-							<small>@list.ToDoItems.Count @(list.ToDoItems.Count == 1 ? "task" : "tasks")</small>
+							<small>@list.EMListItems.Count @(list.EMListItems.Count == 1 ? "task" : "tasks")</small>
 						</div>
 
-						@foreach (ToDoItem item in list.ToDoItems)
+						@foreach (EMListItem item in list.EMListItems)
 						{
 							<EditForm class="form-inline" Model="item">
 								<label class="list-group-item">
@@ -42,7 +42,7 @@
 									{
 										@item.Title
 									}
-									<button class="btn btn-outline-danger float-end todo-item-button fw-bold" type="button"
+									<button class="btn btn-outline-danger float-end item-button fw-bold" type="button"
 								@onclick="(() => Delete(list, item))">
 										<i class="fa fa-trash"></i>
 										<span class="item-button-text">Delete</span>
@@ -53,7 +53,7 @@
 						}
 						<EditForm class="form-inline list-group-item d-initial" Model="@newItem">
 							<InputText placeholder="New Task..." @bind-Value="newItem.Title" />
-							<button class="btn btn-outline-primary float-end todo-item-button fw-bold" type="submit"
+							<button class="btn btn-outline-primary float-end item-button fw-bold" type="submit"
 							@onclick="(() => AddItems(list))">
 								<i class="fa fa-plus"></i>
 								<span class="item-button">Add Item</span>
@@ -70,63 +70,63 @@ else {
 }
 
 @code {
-	private List<ToDoList> ToDos = new List<ToDoList>();
-	private ToDoList currentList = new ToDoList();
-	private ToDoItem newItem = new ToDoItem();
+	private List<EMList> Lists = new List<EMList>();
+	//private EMList currentList = new EMList();
+	private EMListItem newItem = new EMListItem();
 	const string MatrixKey = "tdMatrixKey";
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
-			await GetToDoLists();
+			await GetLists();
 			StateHasChanged();
 		}
 	}
 
-	private async Task SetToDoList()
+	private async Task SetList()
 	{
-		string listString = System.Text.Json.JsonSerializer.Serialize(ToDos);
+		string listString = System.Text.Json.JsonSerializer.Serialize(Lists);
 		await Storage.SetLocalStorage(MatrixKey, listString);
 	}
 
-	private async Task GetToDoLists()
+	private async Task GetLists()
 	{
 		string stringList = await Storage.GetFromLocalStorage(MatrixKey);
 
 		if (stringList != null && stringList != "[]")
 		{
-			List<ToDoList> newList = System.Text.Json.JsonSerializer.Deserialize<List<ToDoList>>(stringList);
-			ToDos = newList != null ? newList : ToDos;
+			List<EMList> newList = System.Text.Json.JsonSerializer.Deserialize<List<EMList>>(stringList);
+			Lists = newList != null ? newList : Lists;
 		}
 		else
 		{
-			ToDos = await Default.GetDefaultTDMatrix();
+			Lists = await Default.GetDefaultData();
 		}
 	}
 
-	private async Task AddItems(ToDoList list)
+	private async Task AddItems(EMList list)
 	{
-		list.ToDoItems.Add(newItem);
-		newItem = new ToDoItem();
-		await SetToDoList();
+		list.EMListItems.Add(newItem);
+		newItem = new EMListItem();
+		await SetList();
 	}
 
-	public async Task UpdateItem(ToDoItem item)
+	public async Task UpdateItem(EMListItem item)
 	{
 		item.IsComplete = !item.IsComplete;
-		await SetToDoList();
+		await SetList();
 	}
 
 	private async Task UpdateItemData()
 	{
-		await SetToDoList();
+		await SetList();
 	}
 
-	private async Task Delete(ToDoList list, ToDoItem item)
+	private async Task Delete(EMList list, EMListItem item)
 	{
-		list.ToDoItems.Remove(item);
-		await SetToDoList();
+		list.EMListItems.Remove(item);
+		await SetList();
 	}
 
 }

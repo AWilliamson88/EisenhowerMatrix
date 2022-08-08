@@ -12,7 +12,7 @@ namespace ApiTests
 {
     public class ApiUnitTests
     {
-        private readonly ToDoListController controller;
+        private readonly EMController controller;
 
         public ApiUnitTests()
         {
@@ -43,7 +43,7 @@ namespace ApiTests
 
             // Assert
             var result = actionResult.Result as OkObjectResult;
-            var returnLists = result.Value as IEnumerable<ToDoList>;
+            var returnLists = result.Value as IEnumerable<EMList>;
             Assert.Equal(count, returnLists.Count());
         }
 
@@ -57,9 +57,9 @@ namespace ApiTests
 
             // Assert
             var result = actionResult.Result as OkObjectResult;
-            var returnLists = result.Value as IEnumerable<ToDoList>;
-            var items = returnLists.Select(x => x.ToDoItems);
-            Assert.All(items, i => Assert.IsType<List<ToDoItem>>(i));
+            var returnLists = result.Value as IEnumerable<EMList>;
+            var items = returnLists.Select(x => x.EMListItems);
+            Assert.All(items, i => Assert.IsType<List<EMListItem>>(i));
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace ApiTests
         {
             // Arrange
             int listId = 0;
-            var validItem = A.Fake<IEnumerable<ToDoItem>>();
+            var validItem = A.Fake<IEnumerable<EMListItem>>();
 
             // Act
             var actionResult = await controller.AddItems(listId, validItem);
@@ -155,8 +155,8 @@ namespace ApiTests
         {
             // Arrange
             int listId = 1;
-            var validItem = new List<ToDoItem>();
-            validItem.Add(A.Fake<ToDoItem>());
+            var validItem = new List<EMListItem>();
+            validItem.Add(A.Fake<EMListItem>());
 
             // Act
             var actionResult = await controller.AddItems(listId, validItem);
@@ -170,7 +170,7 @@ namespace ApiTests
         {
             // Arrange
             int listId = 5;
-            var validItem = A.Fake<IEnumerable<ToDoItem>>();
+            var validItem = A.Fake<IEnumerable<EMListItem>>();
 
             // Act
             var actionResult = await controller.AddItems(listId, validItem);
@@ -185,7 +185,7 @@ namespace ApiTests
         public async void UpdateItem_NullItem_ReturnsBadRequest()
         {
             // Arrange
-            ToDoItem item = null;
+            EMListItem item = null;
 
             // Act
             var actionResult = await controller.UpdateItem(item);
@@ -198,8 +198,8 @@ namespace ApiTests
         public async void UpdateItem_ValidInput_ReturnsOk()
         {
             // Arrange
-            var validItem = A.Fake<ToDoItem>();
-            validItem.ToDoItemId = 2;
+            var validItem = A.Fake<EMListItem>();
+            validItem.EMListItemId = 2;
 
             // Act
             var actionResult = await controller.UpdateItem(validItem);
@@ -212,8 +212,8 @@ namespace ApiTests
         public async void UpdateItem_BadItemId_ReturnsNotFound()
         {
             // Arrange
-            var invalidItem = A.Fake<ToDoItem>();
-            invalidItem.ToDoItemId = 0;
+            var invalidItem = A.Fake<EMListItem>();
+            invalidItem.EMListItemId = 0;
 
             // Act
             var actionResult = await controller.UpdateItem(invalidItem);
@@ -223,10 +223,10 @@ namespace ApiTests
         }
         #endregion
 
-        private static ToDoListController GetController(int count = 4)
+        private static EMController GetController(int count = 4)
         {
-            var fakeLists = A.CollectionOfDummy<ToDoList>(count).AsEnumerable();
-            var database = A.Fake<IToDoDataService>();
+            var fakeLists = A.CollectionOfDummy<EMList>(count).AsEnumerable();
+            var database = A.Fake<IEMDataService>();
 
             A.CallTo(() => database.GetTasks()).Returns(Task.FromResult(fakeLists));
 
@@ -235,14 +235,14 @@ namespace ApiTests
                     listId <= count && itemId <= count ? 1 : 0);
 
             A.CallTo(() => database.ListAddItems(
-                A<int>.Ignored, A<IEnumerable<ToDoItem>>.Ignored))
-                .ReturnsLazily((int listId, IEnumerable<ToDoItem> items) =>
+                A<int>.Ignored, A<IEnumerable<EMListItem>>.Ignored))
+                .ReturnsLazily((int listId, IEnumerable<EMListItem> items) =>
                 listId <= count && items.Any() ? 1 : 0);
 
-            A.CallTo(() => database.UpdateItem(A<ToDoItem>.Ignored))
-                .ReturnsLazily((ToDoItem item) => item.ToDoItemId > 0 ? 1 : 0);
+            A.CallTo(() => database.UpdateItem(A<EMListItem>.Ignored))
+                .ReturnsLazily((EMListItem item) => item.EMListItemId > 0 ? 1 : 0);
 
-            return new ToDoListController(database);
+            return new EMController(database);
         }
     }
 }
